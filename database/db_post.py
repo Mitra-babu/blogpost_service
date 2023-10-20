@@ -1,3 +1,4 @@
+from fastapi import HTTPException, status
 from router.schemas import PostBase
 from sqlalchemy.orm.session import Session
 from datetime import datetime
@@ -16,3 +17,17 @@ def create(db: Session, request: PostBase):
     db.commit()
     db.refresh(new_post)
     return new_post
+
+
+def get_all(db: Session):
+    return db.query(DbPost).all()
+
+
+def delete(db: Session, id_: int, ):
+    post = db.query().filter(DbPost.id == id_).first()
+    if not post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Post with id {id_} not found")
+    db.delete(post)
+    db.commit()
+    return 'ok'
