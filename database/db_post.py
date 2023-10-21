@@ -24,7 +24,7 @@ def get_all(db: Session):
 
 
 def delete(db: Session, id_: int, ):
-    post = db.query().filter(DbPost.id == id_).first()
+    post = db.query(DbPost).filter(DbPost.id == int(id_)).first()
     if not post:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Post with id {id_} not found")
